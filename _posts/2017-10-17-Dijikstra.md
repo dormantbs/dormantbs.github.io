@@ -1,0 +1,103 @@
+---
+layout: post
+title:  "用线段树写Dijikstra！！！"
+date:   2017-10-17 21:42:53 +0800
+categories: Algorithm
+---
+## 用线段树写Dijikstra！！
+众说周知，Dijikstra是一种最短路算法，复杂度为O(V^2+E)
+### 朴素Dijikstra
+```cpp
+void Dijikstra(int s){
+  memset(dis,inf,sizeof(dis));
+  dis[s]=0;
+  for(int i=1;i<=n;++i){
+    int maxs=inf,u=0;
+    for(int j=1;j<=n;++j)
+      if(!vis[j]&&dis[j]<maxs)
+        maxs=dis[j],u=j;
+    vis[u]=1;
+    for(int e=pre[u];e;e=nx[e]){
+      const int v=to[e];
+      if(dis[v]>dis[u]+w[e])
+        dis[v]=dis[u]+w[e];
+    }
+  }
+}
+```
+其实对于稠密图它还是很棒了。  
+但我们不满足于此。
+### 常见优化-heap优化
+这里我们采用STL_priority_queue进行优化
+```cpp
+typedef pair<int,int> p;
+priority_queue<p,vector<p>,greater<p> > q;
+void Dijikstra(int s){
+  memset(dis,inf,sizeof(dis));
+  dis[s]=0;
+  q.push(p(0,s));
+  while(!q.empty()){
+    const int u=q.top().second;
+    q.pop();
+    if(!vis[u]){
+      vis[u]=1;
+      for(int e=pre[u];e;e=nx[e]){
+        const int v=to[e];
+        if(!vis[v]&&dis[v]>dis[u]+w[e])
+          dis[v]=dis[u]+w[e],
+          q.push(p(dis[v],v));
+      }
+    }
+  }
+}
+```
+这样的话复杂度就到了O((V+E)logV)  
+但是，常数大。  
+手写堆比较复杂，不现实。  
+### 奇怪的优化-线段树优化
+这并不是自己发现的，但是网上资料少就记录一下吧。  
+我们回头看看朴素的Dijikstra以及priority_queue优化。  
+发现优化的主要思路就是减少了查询当前dis最小点的复杂度。  
+那么也很容易想到用线段树来维护dis的最小值吧。  
+这样问题就变成了 整体最小值与单点修改，很简单的线段树操作吧。
+```cpp
+int tree[N<<2],leaf;
+/*线段树存的是点的标号*/
+int check(int i,int j){
+  return dis[i]<dis[j]?i:j;
+}
+void build(){
+  memset(dis,inf,sizeof(dis));
+  for(leaf=1;leaf<=n;leaf<<=1);--leaf;
+  for(int i=1;i<=n;++i) tree[leaf+i]=i;
+}
+/*修改 dis[x] 为 y*/
+void change(int x,int y){
+  dis[x]=y,x+=leaf,x>>=1;
+  while(x) tree[x]=check(tree[x<<1],tree[x<<1|1]),x>>=1;
+}
+void Dijikstra(int s){
+  build();
+  dis[s]=0;
+  int u=s;
+  for(int i=1;i<=n;++i){
+    ans[u]=dis[u];
+    change(u,max_int); /*删除u*/
+    for(int e=pre[u];e;e=nx[e]){
+      const int v=to[e];
+      if(dis[v]>ans[u]+w[e])
+        change(v,ans[u]+w[e]);
+    }
+    u=tree[1];
+  }
+}
+```
+这个比堆短吧。  
+而且非递归的线段树常数也很小呢。
+### 测试&总结
+以luogu的单源最短路模板题(稀疏图,无O2)作为测试。  
+朴素的Dijikstra 2000+ms  
+Dijikstra+priority_queue 652ms  
+Dijikstra+线段树 192ms  
+然后加了SLF和LLL的SPFA也很快，大概300ms  
+所以SPFA和Dijikstra+priority_queue是很实用的，但如果想卡排名的话可以试一试线段树啊  
