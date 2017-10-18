@@ -1,8 +1,10 @@
 ---
 layout: post
 title:  "用线段树写Dijikstra！！！"
-date:   2017-10-17 21:42:53 +0800
-categories: Blog
+date:   2017-10-17
+excerpt: "速度是没有极限的。"
+tags: [Algorithm, Graph]
+comments: true
 ---
 ## 用线段树写Dijikstra！！
 众说周知，Dijikstra是一种最短路算法，复杂度为O(V^2+E)

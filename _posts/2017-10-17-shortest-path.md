@@ -1,8 +1,10 @@
 ---
 layout: post
 title: "最短路总结"
-date: 2017-10-17 21:45:26 +0800
-categories: Blog
+date: 2017-10-17
+excerpt: "穿越空间的限制，走最短的路找到你"
+tags: [Algorithm, Graph]
+comments: true
 ---
 ## 最短路总结
 ### 1.最短路
