@@ -37,6 +37,7 @@ void Floyd(){
 ```cpp
 void Bellman_ford(int s){
   memset(dis,inf,sizeof(dis));
+  dis[s]=0;
   for(int i=1;i<n;++i)
     for(int j=1;j<=m;++j)
       relax(Edge[j].u,Edge[j].w,Edge[j].v);
@@ -51,6 +52,7 @@ void SPFA(int s){
   memset(dis,inf,sizeof(dis));
   q.push(s);
   vis[s]=1;
+  dis[s]=0;
   while(!q.empty()){
     const int u=q.front();
     q.pop();
@@ -68,9 +70,9 @@ void SPFA(int s){
 复杂度O(k*E)
 可处理负环(一个点入队次数超过n次)
 加上SLF和LLL优化后k很小
-#### Dijikstra
+#### Dijkstra
 ```cpp
-void Dijikstra(int s){
+void Dijkstra(int s){
   memset(dis,inf,sizeof(dis));
   dis[s]=0;
   for(int i=1;i<=n;++i){
@@ -125,16 +127,16 @@ int DAG_shortest_path(){
 ### 6.最短路算法的选择
 #### 对于稀疏图
 首选自然是SPFA，好打而且跑得快，而且几乎没有考试丧心病狂到卡SPFA。
-如果实在不放心，就选择priority_queue+Dijikstra吧。
+如果实在不放心，就选择priority_queue+Dijkstra吧。
 #### 对于稠密图
 如果点数很小而且要求任意两个点之间的距离,那么就Floyd吧
-否则首选是Dijikstra+priority_queue,至于为什么不选择朴素Dijikstra，因为它比较长。
+否则首选是Dijkstra+priority_queue,至于为什么不选择朴素Dijkstra，因为它比较长。
 #### 对于有负权的图
 SPFA
 #### 对于DAG且不要求源点与汇点
 DAG最短/最长链
 #### 总之
-SPFA和priority_queue Dijikstra比较实用，一般会这两个就行了。
+SPFA和priority_queue Dijkstra比较实用，一般会这两个就行了。
 最好写的是Floyd。
 DAG最短/最长链在某些题目中很重要。
 Bellman-Ford没卵用。
