@@ -8,7 +8,7 @@ comments: false
 
 [寂寞XZY http://blog.csdn.net/qq_35757800](http://blog.csdn.net/qq_35757800)
 
-[HYH大佬 https://www.cnblogs.com/bbqub](https://www.cnblogs.com/bbqub)
+[BBQUB大佬 bbqub.github.io](http://bbqub.github.io)
 
 [TZD大佬  http://blog.csdn.net/tangzhide123yy/
 ](http://blog.csdn.net/tangzhide123yy/)
